@@ -3,6 +3,9 @@ dotenv.config() // Loads the environment variables from .env file
 const express = require('express')
 const mongoose = require('mongoose') // require package
 
+// MODELS
+const Fruit = require('./models/fruit.js')
+
 const app = express()
 
 // Connect to MongoDB using the connection string in the .env file
@@ -16,7 +19,7 @@ app.listen(3000, () => {
   console.log('Listening on port 3000')
 })
 
-// GET /
+// GET 
 app.get('/', async (req, res) => {
   res.render('index.ejs')
 })
