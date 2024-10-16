@@ -30,7 +30,7 @@ mongoose.connection.on('connected', () => {
 //////////////////////////////////////////////////////
 ///////////////     ROUTES     ///////////////////////
 //////////////////////////////////////////////////////
-// GET
+// GET homepage
 app.get('/', async (req, res) => {
   res.render('index.ejs')
 })
@@ -40,7 +40,7 @@ app.get('/fruits/new', (req, res) => {
   res.render('fruits/new.ejs')
 })
 
-// POST /fruits
+// POST /fruits (Create)
 app.post('/fruits', async (req, res) => {
   //   convert this "on" or undefined value to a Boolean
   const formData = req.body
@@ -54,7 +54,14 @@ app.post('/fruits', async (req, res) => {
   await Fruit.create(formData)
 
   //   redirect the user back to the form page
-  res.redirect('/fruits/new')
+  res.redirect('/fruits')
+})
+
+// GET /fruits (Read - Index)
+app.get('/fruits', async (req, res) => {
+  const allFruits = await Fruit.find({})
+  //   pass the fruits data from our database to the EJS file by passing { fruits: allFruits }
+  res.render('fruits/index.ejs', { fruits: allFruits })
 })
 
 app.listen(3000, () => {
