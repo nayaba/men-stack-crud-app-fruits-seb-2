@@ -2,12 +2,19 @@ const dotenv = require('dotenv') // require package
 dotenv.config() // Loads the environment variables from .env file
 const express = require('express')
 const mongoose = require('mongoose') // require package
-
-// MODELS
-const Fruit = require('./models/fruit.js')
+const morgan = require('morgan')
 
 const app = express()
 
+///////////////    MODELS      ///////////////////
+const Fruit = require('./models/fruit.js')
+
+
+///////////////    MIDDLEWARE      ///////////////////
+app.use(morgan('dev'))
+
+
+///////////////     DB CONNECTION    ///////////////////
 // Connect to MongoDB using the connection string in the .env file
 mongoose.connect(process.env.MONGODB_URI)
 // log connection status to terminal on start
