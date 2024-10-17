@@ -2,6 +2,7 @@ const dotenv = require('dotenv') // require package
 dotenv.config() // Loads the environment variables from .env file
 const express = require('express')
 const mongoose = require('mongoose') // require package
+const methodOverride = require('method-override')
 const morgan = require('morgan')
 
 const app = express()
@@ -15,6 +16,7 @@ const Fruit = require('./models/fruit.js')
 ///////////////     MIDDLEWARE     ///////////////////
 //////////////////////////////////////////////////////
 app.use(express.urlencoded({ extended: false }))
+app.use(methodOverride('_method'))
 app.use(morgan('dev'))
 
 //////////////////////////////////////////////////////
@@ -47,6 +49,12 @@ app.get('/fruits/new', (req, res) => {
   res.render('fruits/new.ejs')
 })
 
+
+app.delete('/fruits/:fruitId', async (req, res) => {
+    await Fruit.findByIdAndDelete(req.params.fruitId)
+    res.redirect('/fruits')
+})
+
 // GET /fruits/:fruitId (Read - Show)
 app.get('/fruits/:fruitId', async (req, res) => {
   const foundFruit = await Fruit.findById(req.params.fruitId)
@@ -69,6 +77,7 @@ app.post('/fruits', async (req, res) => {
   //   redirect the user back to the form page
   res.redirect('/fruits')
 })
+
 
 app.listen(3000, () => {
   console.log('Listening on port 3000')
