@@ -51,8 +51,8 @@ app.get('/fruits/new', (req, res) => {
 
 // DELETE /fruits/:fruitId (Delete)
 app.delete('/fruits/:fruitId', async (req, res) => {
-    await Fruit.findByIdAndDelete(req.params.fruitId)
-    res.redirect('/fruits')
+  await Fruit.findByIdAndDelete(req.params.fruitId)
+  res.redirect('/fruits')
 })
 
 // GET /fruits/:fruitId (Read - Show)
@@ -80,11 +80,22 @@ app.post('/fruits', async (req, res) => {
 
 // GET /fruits/:fruitId/edit
 app.get('/fruits/:fruitId/edit', async (req, res) => {
-    const foundFruit = await Fruit.findById(req.params.fruitId)
-    console.log(foundFruit)
-    res.render('fruits/edit.ejs', { fruit: foundFruit })
+  const foundFruit = await Fruit.findById(req.params.fruitId)
+  console.log(foundFruit)
+  res.render('fruits/edit.ejs', { fruit: foundFruit })
 })
 
+app.put('/fruits/:fruitId', async (req, res) => {
+  //   convert this "on" or undefined value to a Boolean
+  const formData = req.body
+  if (req.body.isReadyToEat === 'on') {
+    formData.isReadyToEat = true
+  } else {
+    formData.isReadyToEat = false
+  }
+  await Fruit.findByIdAndUpdate(req.params.fruitId, formData)
+  res.redirect(`/fruits/${req.params.fruitId}`)
+})
 
 app.listen(3000, () => {
   console.log('Listening on port 3000')
